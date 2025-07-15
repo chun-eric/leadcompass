@@ -42,15 +42,23 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
         </div>
       </div>
 
-      <p className=""></p>
+      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+        {company.description}
+      </p>
 
-      <div className="">
-        <div className=""></div>
+      <div className="flex items-center justify-between text-sm text-gray-500">
+        <div className="flex items-center space-x-4">
+          <span>{company.industry}</span>
+          <span>•</span>
+          <span>{company.employees} employees</span>
+          <span>•</span>
+          <span>{getEmployeeSize(company.employees)}</span>
+        </div>
       </div>
 
-      <div className="">
-        <span className=""></span>
-        <span className=""></span>
+      <div className="mt-4 flex items-center justify-between">
+        <span className="text-sm text-gray-500">{company.location}</span>
+        <span className="text-sm text-gray-500">{company.lastActivity}</span>
       </div>
     </div>
   );
