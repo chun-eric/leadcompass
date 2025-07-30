@@ -35,8 +35,10 @@ export default function CompaniesPage() {
       const matchesSearch = company.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
+
       const matchesIndustry =
         !selectedIndustry || company.industry === selectedIndustry;
+
       const matchesIntent =
         !intentFilter ||
         (() => {
@@ -60,7 +62,24 @@ export default function CompaniesPage() {
   if (isLoading) {
     return (
       <DashboardLayout>
-        <div className="">Loading companies...</div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold tracking-tight">Companies</h1>
+          </div>
+
+          {/* Loading skeleton */}
+          <div className="space-y-4">
+            <div className="h-10 bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+              {[...Array(6)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-48 bg-gray-200 rounded-lg animate-pulse"
+                ></div>
+              ))}
+            </div>
+          </div>
+        </div>
       </DashboardLayout>
     );
   }
@@ -103,27 +122,67 @@ export default function CompaniesPage() {
             <option value="medium">Medium</option>
             <option value="low">Low</option>
           </select>
+
+          {/* Clear Filters Button */}
+          <button
+            onClick={() => {
+              setSearchTerm("");
+              setSelectedIndustry("");
+              setIntentFilter("");
+            }}
+            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Clear Filters
+          </button>
         </div>
 
         {/* <p className="">You searched for: {searchTerm}</p> */}
         <p className="">Found {filteredCompanies?.length} companies</p>
 
-        {/* Show company names */}
-        {/* <ul>
-          {filteredCompanies?.map((company) => (
-            <li className="" key={company.id}>
-              {company.name}
-            </li>
-          ))}
-        </ul> */}
+        {/* Quick stats - add this before the company grid */}
+        {filteredCompanies.length > 0 && (
+          <div className="bg-gray-50 rounded-lg p-4 mb-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {filteredCompanies.filter((c) => c.intentScore >= 80).length}
+              </div>
+              <div className="text-sm text-gray-600">High Intent</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600">
+                {
+                  filteredCompanies.filter(
+                    (c) => c.intentScore >= 60 && c.intentScore < 80
+                  ).length
+                }
+              </div>
+              <div className="text-sm text-gray-600">Medium Intent</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">
+                {Math.round(
+                  filteredCompanies.reduce((sum, c) => sum + c.employees, 0) /
+                    filteredCompanies.length || 0
+                )}
+              </div>
+              <div className="text-sm text-gray-600">Avg Employees</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">
+                {new Set(filteredCompanies.map((c) => c.industry)).size}
+              </div>
+              <div className="text-sm text-gray-600">Industries</div>
+            </div>
+          </div>
+        )}
 
         {/* Grid of company cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {filteredCompanies.map((company) => (
             <CompanyCard
               key={company.id}
               company={company}
-              onClick={(company) => console.log("Clicked", company.name)}
+              onClick={(company) => console.log("Clicked:", company.name)}
             />
           ))}
         </div>
