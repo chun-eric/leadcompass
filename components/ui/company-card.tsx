@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 import { Company } from "@/lib/mock-companies";
 
@@ -7,6 +8,14 @@ interface CompanyCardProps {
 }
 
 export function CompanyCard({ company, onClick }: CompanyCardProps) {
+  // router to route paths
+  const router = useRouter();
+
+  // route to company id
+  const handleClick = () => {
+    router.push(`/companies/${company.id}`);
+  };
+
   const getIntentColor = (score: number) => {
     if (score >= 80) return "text-green-600 bg-green-50";
     if (score >= 60) return "text-orange-600 bg-orange-50";
@@ -24,7 +33,7 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
   return (
     <div
       className="bg-white rounded-lg border hover:shadow-md transition-shadow  cursor-pointer p-6"
-      onClick={() => onClick?.(company)}
+      onClick={handleClick}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1 ">
