@@ -14,7 +14,7 @@ export function Sidebar() {
           <li className="block p-3 rounded hover:bg-gray-700">
             <a href="/companies">Companies</a>
           </li>
-          <li className="block p-3 rounded hover:bg-gray-700">
+          <li className="block p-3 rounded hover:bg-gray-700 transition-colors">
             <a href="/analytics">Analytics</a>
           </li>
         </ul>
